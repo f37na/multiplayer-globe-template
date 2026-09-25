@@ -80,8 +80,7 @@ function App() {
 
 				// Rotate the globe
 				state.phi = phi;
-				// Genshin Time
-				phi += 0.0017448;
+				phi += 0.003;
 			},
 		});
 
@@ -92,28 +91,11 @@ function App() {
 
 	return (
 		<div className="App">
-			{/* <h1>Where's everyone at?</h1> */}
-			{counter !== 0 ? (
-				<p>
-					{/* <b>{counter}</b> {counter === 1 ? "person" : "people"} connected. */}
-					<b>{counter}</b>
-				</p>
-			) : (
-				<p>&nbsp;</p>
-			)}
-
 			{/* The canvas where we'll render the globe */}
 			<canvas
 				ref={canvasRef}
 				style={{ width: 400, height: 400, maxWidth: "100%", aspectRatio: 1 }}
 			/>
-
-			{/* Let's give some credit */}
-			{/* <p>
-				Powered by <a href="https://cobe.vercel.app/">🌏 Cobe</a>,{" "}
-				<a href="https://www.npmjs.com/package/phenomenon">Phenomenon</a> and{" "}
-				<a href="https://npmjs.com/package/partyserver/">🎈 PartyServer</a>
-			</p> */}
 		</div>
 	);
 }
