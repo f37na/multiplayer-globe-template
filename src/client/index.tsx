@@ -55,6 +55,38 @@ function App() {
 		// The angle of rotation of the globe
 		// We'll update this on every frame to make the globe spin
 		let phi = 0;
+		let theta = 0;
+		let isDragging = false;
+		let lastPointerPosition = { x: 0, y: 0 };
+		const canvas = canvasRef.current;
+
+		const handlePointerDown = (event: PointerEvent) => {
+			isDragging = true;
+			lastPointerPosition = { x: event.clientX, y: event.clientY };
+			canvas.setPointerCapture(event.pointerId);
+		};
+
+		const handlePointerMove = (event: PointerEvent) => {
+			if (!isDragging) return;
+
+			const deltaX = event.clientX - lastPointerPosition.x;
+			const deltaY = event.clientY - lastPointerPosition.y;
+			phi += deltaX * 0.01;
+			theta = Math.max(-0.8, Math.min(0.8, theta + deltaY * 0.01));
+			lastPointerPosition = { x: event.clientX, y: event.clientY };
+		};
+
+		const handlePointerUp = (event: PointerEvent) => {
+			isDragging = false;
+			if (canvas.hasPointerCapture(event.pointerId)) {
+				canvas.releasePointerCapture(event.pointerId);
+			}
+		};
+
+		canvas.addEventListener("pointerdown", handlePointerDown);
+		canvas.addEventListener("pointermove", handlePointerMove);
+		canvas.addEventListener("pointerup", handlePointerUp);
+		canvas.addEventListener("pointercancel", handlePointerUp);
 
 		const globe = createGlobe(canvasRef.current, {
 			devicePixelRatio: 2,
@@ -62,13 +94,13 @@ function App() {
 			height: 400 * 2,
 			phi: 0,
 			theta: 0,
-			dark: 1,
+			dark: 0,
 			diffuse: 0.8,
 			mapSamples: 16000,
-			mapBrightness: 6,
-			baseColor: [0.3, 0.3, 0.3],
-			markerColor: [0.8, 0.1, 0.1],
-			glowColor: [0.2, 0.2, 0.2],
+			mapBrightness: 1.5,
+			baseColor: [0.85, 0.85, 0.85],
+			markerColor: [0.192, 0.471, 0.776],
+			glowColor: [0.75, 0.8, 0.9],
 			markers: [],
 			opacity: 0.7,
 			onRender: (state) => {
@@ -80,11 +112,16 @@ function App() {
 
 				// Rotate the globe
 				state.phi = phi;
-				phi += 0.003;
+				state.theta = theta;
+				if (!isDragging) phi += 0.005;
 			},
 		});
 
 		return () => {
+			canvas.removeEventListener("pointerdown", handlePointerDown);
+			canvas.removeEventListener("pointermove", handlePointerMove);
+			canvas.removeEventListener("pointerup", handlePointerUp);
+			canvas.removeEventListener("pointercancel", handlePointerUp);
 			globe.destroy();
 		};
 	}, []);
@@ -94,7 +131,7 @@ function App() {
 			{/* The canvas where we'll render the globe */}
 			<canvas
 				ref={canvasRef}
-				style={{ width: 400, height: 400, maxWidth: "100%", aspectRatio: 1 }}
+				className="globe-canvas"
 			/>
 		</div>
 	);
