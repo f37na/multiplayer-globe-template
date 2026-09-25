@@ -101,7 +101,14 @@ function App() {
 			baseColor: [0.85, 0.85, 0.85],
 			markerColor: [0.192, 0.471, 0.776],
 			glowColor: [0.75, 0.8, 0.9],
-			markers: [],
+			markers: [
+			  // Basic marker
+			  { location: [37.78, -122.44], size: 0.03 },
+			  // With custom color (RGB 0-1)
+			  { location: [51.51, -0.13], size: 0.05, color: [1, 0, 0] },
+			  // With id for CSS anchoring
+			  { location: [35.68, 139.65], size: 0.04, id: 'tokyo' }
+			],
 			opacity: 0.7,
 			onRender: (state) => {
 				// Called on every animation frame.
