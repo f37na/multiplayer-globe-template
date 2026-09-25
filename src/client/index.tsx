@@ -80,7 +80,8 @@ function App() {
 
 				// Rotate the globe
 				state.phi = phi;
-				phi += 0.0067;
+				// Genshin Time
+				phi += 0.0000727;
 			},
 		});
 
