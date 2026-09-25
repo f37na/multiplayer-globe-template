@@ -80,7 +80,7 @@ function App() {
 
 				// Rotate the globe
 				state.phi = phi;
-				phi += 0.004; // make the globe rotate a little slower
+				phi += 0.005;
 			},
 		});
 
